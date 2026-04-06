@@ -3,7 +3,7 @@ export const projectsData = [
     name: "Portfolio",
     description:
       "A high-performance personal brand site optimized for SEO and fluid UX. Features custom animations and a 90+ Lighthouse score for speed and accessibility.",
-    github_link: "https://github.com/stayrahul/an",
+    github_link: "https://github.com/stayrahul/",
     demo: "https://stayrahul.me/",
     tech: ["TypeScript", "React", "Node.js", "Tailwind CSS", "Framer Motion", "Vercel"],
   },
@@ -19,8 +19,8 @@ export const projectsData = [
     name: "Portfolio 3.0",
     description:
       "A real-time collaborative hub with instant file synchronization and multi-user presence. Built for seamless team productivity and cloud storage.",
-    github_link: "https://github.com/stayrahul/ideascribe",
-    demo: "https://ideascribe.vercel.app/",
+    github_link: "https://github.com/stayrahul/portfolio-3.0",
+    demo: "https://portfolio-3-0-liart.vercel.app",
     tech: ["TypeScript", "React", "Node.js", "Convex", "EdgeStore", "Tailwind CSS"],
   },
   {
