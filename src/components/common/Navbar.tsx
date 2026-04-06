@@ -134,7 +134,9 @@ export const Navbar = () => {
               className="rounded-full px-6 h-9 font-medium transition-all"
               asChild
             >
-              <Link href="/resume">Resume</Link>
+              <Link href="https://wa.me/+9779826216084" target="_blank" rel="noopener noreferrer">
+                WhatsApp
+              </Link>
             </Button>
 
             <button
