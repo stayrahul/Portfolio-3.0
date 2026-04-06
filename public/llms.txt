@@ -1,0 +1,28 @@
+# Sushant Kushwaha - Student Developer Portfolio
+
+## About
+Sushant Kushwaha is a Student Developer and Creative Coder based in Bhubaneswar, India. He specializes in Full-Stack Web Development, primarily using the React and Next.js ecosystem.
+
+## Skills
+- **Languages**: JavaScript, TypeScript, Python, Java, C/C++, SQL
+- **Frameworks**: Next.js, React, Express.js, Tailwind CSS
+- **Tools**: Git, GitHub, Vercel, Firebase, MongoDB
+
+## Projects
+- **Portfolio**: This website, showcasing his work and skills.
+- **Various Open Source Experiments**: Available on GitHub.
+
+## Contact
+- **Email**: rahul7926963@gmail.com
+- **GitHub**: https://github.com/stayrahul
+- **Twitter**: https://x.com/stayrahul
+- **Instagram**: https://instagram.com/stayrahul
+- **TIKTOK**: https://www.tiktok.com/@stayrahul
+- **whatsapp**: https://wa.me/+9779822228722
+- **Facebook**: https://facebook.com/stayrahul
+- **YouTube**: https://youtube.com/@stayrahul
+- **Resume**: [View/Download](https://stayrahul.github.io/resume.pdf)
+
+## Content Structure
+- `/`: Main landing page with Hero, About, Skills, Experience, Projects, and Contact sections.
+- `/resume`: Direct link to view/download resume.
