@@ -23,7 +23,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   applicationName: "Sushant Kushwaha",
   title: {
-    default: "Sushant Kushwaha | Full Stack Developer",
+    default: "Sushant Kushwaha | Student",
     template: "%s | Sushant Kushwaha" // Allows subpages like /projects to show "Projects | Sushant Kushwaha"
   },
   description:
