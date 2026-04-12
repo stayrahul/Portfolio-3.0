@@ -1,37 +1,27 @@
 "use client";
 
-import { nasalization, mono } from "@/app/fonts";
+import { nasalization, mono, quentine } from "@/app/fonts";
 import { selfData } from "@/constant";
 import { motion, AnimatePresence } from "framer-motion";
-import { FC, useState, useEffect } from "react";
-
-const NamePart: FC<{ text: string; delay: number }> = ({ text, delay }) => {
-  return (
-    <div className="relative overflow-hidden px-2">
-      <motion.span
-        initial={{ y: "100%", opacity: 0, letterSpacing: "0.5em" }}
-        animate={{ y: 0, opacity: 1, letterSpacing: "-0.02em" }}
-        transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1], delay }}
-        className={`block text-white text-4xl md:text-6xl font-black ${nasalization.className} leading-none tracking-tighter`}
-      >
-        {text}
-      </motion.span>
-    </div>
-  );
-};
+import { useState, useEffect } from "react";
 
 export const PreLoader = () => {
+  const [counter, setCounter] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
-    document.body.style.overflow = "hidden";
-    const timer = setTimeout(() => {
+    // High-speed countdown for "Data Stream" effect
+    const interval = setInterval(() => {
+      setCounter((prev) => (prev < 100 ? prev + 1 : 100));
+    }, 15);
+
+    const timeout = setTimeout(() => {
       setIsVisible(false);
-      document.body.style.overflow = "unset";
-    }, 3800);
+    }, 2400); // Snappier exit for better UX
+
     return () => {
-      clearTimeout(timer);
-      document.body.style.overflow = "unset";
+      clearInterval(interval);
+      clearTimeout(timeout);
     };
   }, []);
 
@@ -39,103 +29,105 @@ export const PreLoader = () => {
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          key="preloader"
-          exit={{ 
-            opacity: 0,
-            scale: 0.9, // Shrinks away into a point for a "Power Off" look
-            filter: "brightness(2) contrast(1.2) blur(10px)",
-            transition: { duration: 1, ease: [0.8, 0, 0.2, 1] } 
-          }}
-          className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#010103] overflow-hidden"
+          exit={{ clipPath: "inset(0 0 100% 0)" }} // "Cutter" exit effect
+          transition={{ duration: 0.8, ease: [0.85, 0, 0.15, 1] }}
+          className="fixed inset-0 z-[9999] bg-[#050505] flex flex-col justify-between p-8 md:p-16 overflow-hidden"
         >
-          {/* 1. THE 3D KINETIC CUBE (The "Square" Core) */}
-          <div className="absolute inset-0 perspective-[1500px] pointer-events-none flex items-center justify-center">
-            <motion.div 
-              initial={{ rotateX: 45, rotateZ: 45, opacity: 0, scale: 0.5 }}
-              animate={{ rotateX: [45, 90, 45], rotateZ: [45, 135, 45], opacity: 0.15, scale: 1.2 }}
-              transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-              className="w-[500px] h-[500px] border-[1px] border-cyan-500/40 relative"
-            >
-              {/* Internal Square Accents */}
-              <div className="absolute inset-10 border border-cyan-500/20" />
-              <div className="absolute inset-20 border border-cyan-500/10" />
-            </motion.div>
-
-            {/* Floor/Ceiling Grids */}
-            <div className="absolute inset-0 opacity-[0.1] pointer-events-none">
-              <div className="absolute inset-0" style={{ 
-                backgroundImage: `linear-gradient(rgba(34, 211, 238, 0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(34, 211, 238, 0.2) 1px, transparent 1px)`,
-                backgroundSize: '80px 80px',
-                transform: 'rotateX(75deg) translateY(400px) scale(3)',
-                maskImage: 'radial-gradient(circle, black, transparent 80%)'
-              }} />
+          {/* 1. TOP TELEMETRY: ASYMMETRIC DATA */}
+          <div className="flex justify-between items-start z-10">
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <span className="w-1 h-1 bg-primary animate-pulse" />
+                <span className={`${mono.className} text-[8px] tracking-[0.5em] text-white/40 uppercase`}>
+                  System_Handshake
+                </span>
+              </div>
+              <p className={`${mono.className} text-[7px] text-white/10 uppercase tracking-[0.3em]`}>
+                AUTH_REF: 0x2A9F // KTM_NP
+              </p>
+            </div>
+            <div className="flex flex-col items-end">
+              <span className={`${mono.className} text-2xl md:text-4xl font-black text-white tabular-nums tracking-tighter`}>
+                {counter}%
+              </span>
+              <span className={`${mono.className} text-[7px] text-primary uppercase tracking-[0.4em]`}>
+                Loading_Assets
+              </span>
             </div>
           </div>
 
-          {/* 2. REFINED HUD CONTENT */}
-          <div className="relative z-10 flex flex-col items-center">
-            {/* Minimalist Viewfinder Brackets */}
-            <div className="relative p-12 border-x border-white/5">
-              <motion.div 
-                initial={{ width: 0 }}
-                animate={{ width: "100%" }}
-                transition={{ duration: 1.5, ease: "circOut" }}
-                className="absolute top-0 left-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent" 
-              />
-              
-              <div className="flex flex-col md:flex-row items-center gap-0 md:gap-4">
-                <NamePart text={selfData.first_name} delay={0.2} />
-                <div className="hidden md:block w-2 h-2 bg-cyan-500 shadow-[0_0_10px_#22d3ee] rotate-45" />
-                <NamePart text={selfData.last_name} delay={0.4} />
-              </div>
+          {/* 2. CENTER: KINETIC ARCHETYPE (SCALED FOR IPHONE) */}
+          <div className="relative flex flex-col items-start justify-center">
+             {/* Huge Ghost Number behind everything */}
+             <span className={`${nasalization.className} absolute -left-10 text-[60vw] text-white/[0.01] pointer-events-none select-none`}>
+               {counter.toString().padStart(2, '0')}
+             </span>
 
-              <motion.div 
-                initial={{ width: 0 }}
-                animate={{ width: "100%" }}
-                transition={{ duration: 1.5, ease: "circOut", delay: 0.2 }}
-                className="absolute bottom-0 right-0 h-[1px] bg-gradient-to-l from-transparent via-cyan-400 to-transparent" 
-              />
-            </div>
-
-            {/* Micro Technical Data */}
-            <div className="mt-8 flex flex-col items-center gap-4">
-              <motion.div 
-                animate={{ opacity: [0.2, 0.5, 0.2] }}
-                transition={{ repeat: Infinity, duration: 2 }}
-                className="flex items-center gap-4"
-              >
-                <span className={`${mono.className} text-[8px] uppercase tracking-[1em] text-white/40`}>
-                  System.Protocol.Init
-                </span>
-                <div className="w-[1px] h-3 bg-white/20" />
-                <span className={`${mono.className} text-[8px] uppercase tracking-[1em] text-cyan-400`}>
-                  v2.026_Stable
-                </span>
-              </motion.div>
-
-              {/* Square Node Loading */}
-              <div className="flex gap-1.5">
-                {[...Array(8)].map((_, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: [0, 1, 0] }}
-                    transition={{ repeat: Infinity, duration: 1, delay: i * 0.1 }}
-                    className="w-1.5 h-1.5 border border-cyan-500/50"
-                  />
-                ))}
-              </div>
-            </div>
+             <div className="flex flex-col gap-0 md:gap-4 relative z-10">
+                <motion.span 
+                  initial={{ x: -20, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  className={`${nasalization.className} text-[18vw] md:text-[12vw] text-white leading-[0.8] tracking-tighter`}
+                >
+                  {selfData.first_name.toUpperCase()}
+                </motion.span>
+                <motion.div 
+                  initial={{ x: 20, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ delay: 0.1 }}
+                  className="flex items-center gap-4 ml-8 md:ml-16"
+                >
+                  <div className="h-[1px] w-12 md:w-24 bg-primary/40" />
+                  <span className={`${quentine.className} text-[12vw] md:text-[8vw] text-primary italic leading-none`}>
+                    {selfData.last_name}
+                  </span>
+                </motion.div>
+             </div>
           </div>
 
-          {/* 3. ATMOSPHERIC OVERLAYS */}
-          <div className="absolute inset-0 pointer-events-none">
-            {/* Scanline Grain */}
-            <div className="absolute inset-0 opacity-[0.03] mix-blend-overlay"
-              style={{ backgroundImage: `url("https://grainy-gradients.vercel.app/noise.svg")`, backgroundSize: '100px' }}
-            />
-            {/* Luminous Vignette */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_20%,rgba(1,1,3,0.95) 100%)]" />
+          {/* 3. BOTTOM: PROGRESS ARCHITECTURE */}
+          <div className="flex flex-col gap-8 z-10">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+               <div className="border-l border-white/10 pl-3">
+                  <span className={`${mono.className} text-[6px] text-white/20 uppercase tracking-widest`}>Kernel</span>
+                  <span className={`${mono.className} text-[8px] text-white/60 block`}>Stable_v2</span>
+               </div>
+               <div className="border-l border-white/10 pl-3">
+                  <span className={`${mono.className} text-[6px] text-white/20 uppercase tracking-widest`}>Mode</span>
+                  <span className={`${mono.className} text-[8px] text-white/60 block`}>Production</span>
+               </div>
+            </div>
+
+            <div className="space-y-2">
+              <div className="flex justify-between items-end px-1">
+                <span className={`${mono.className} text-[7px] uppercase tracking-[0.6em] text-white/20`}>
+                  Deployment_Protocol
+                </span>
+                <span className={`${mono.className} text-[7px] text-primary font-bold`}>
+                  {counter === 100 ? "SUCCESS" : "RUNNING"}
+                </span>
+              </div>
+              {/* SURGICAL PROGRESS TRACK */}
+              <div className="w-full h-[2px] bg-white/[0.03] overflow-hidden">
+                <motion.div 
+                  className="h-full bg-primary shadow-[0_0_20px_rgba(var(--primary-rgb),0.8)]"
+                  initial={{ width: 0 }}
+                  animate={{ width: `${counter}%` }}
+                  transition={{ ease: "linear" }}
+                />
+              </div>
+            </div>
+
+            <div className="flex justify-between items-center opacity-20">
+              <span className={`${mono.className} text-[7px] uppercase tracking-[0.5em]`}>
+                © 2026 // SUSHANT_DEV
+              </span>
+              <div className="flex gap-1">
+                 {[...Array(4)].map((_, i) => (
+                   <div key={i} className="w-1 h-1 bg-white rounded-full" />
+                 ))}
+              </div>
+            </div>
           </div>
         </motion.div>
       )}

@@ -2,7 +2,7 @@
 
 import { motion, useInView } from "framer-motion";
 import React, { useRef, useEffect, useState, FC } from "react";
-import { nasalization, mono } from "@/app/fonts";
+import { nasalization, mono, quentine } from "@/app/fonts"; // Consistency
 import { skillsData } from "@/constant";
 import { SkillCard } from "@/components/Cards";
 
@@ -15,22 +15,24 @@ const Marquee: FC<{ skills: any[]; direction: "left" | "right" }> = ({ skills, d
   }, [skills]);
 
   return (
-    <div className="relative py-2 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]">
+    <div className="relative py-1 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_20%,black_80%,transparent)]">
       <motion.div
         ref={marqueeRef}
-        className="flex gap-4 items-center"
+        className="flex gap-6 items-center"
         animate={{ x: direction === "right" ? [0, -width] : [-width, 0] }}
-        transition={{ repeat: Infinity, duration: 25, ease: "linear" }}
-        whileHover={{ animationPlayState: "paused" }}
+        transition={{ repeat: Infinity, duration: 40, ease: "linear" }} // Slower is more premium
       >
         {[...skills, ...skills, ...skills].map((skill, i) => (
-          <div key={i} className="flex-shrink-0 scale-75 md:scale-90 hover:scale-100 transition-transform duration-300">
+          <div key={i} className="flex-shrink-0 flex items-center gap-2 group/item opacity-40 hover:opacity-100 transition-opacity duration-500">
              <SkillCard 
                 title={skill.title} 
                 Icon={skill.logoComponent} 
                 color={skill.color}
-                className="!p-2 !bg-transparent border-none shadow-none" // Stripping internal padding to make it smaller
+                className="!p-0 !bg-transparent border-none shadow-none scale-75 md:scale-90" 
              />
+             <span className={`${mono.className} text-[9px] tracking-widest uppercase hidden md:block`}>
+               {skill.title}
+             </span>
           </div>
         ))}
       </motion.div>
@@ -40,73 +42,79 @@ const Marquee: FC<{ skills: any[]; direction: "left" | "right" }> = ({ skills, d
 
 export const Skills = () => {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: false, amount: 0.3 });
+  const isInView = useInView(ref, { once: false, amount: 0.2 });
 
   return (
-    <section id="skills" ref={ref} className="py-20 relative">
-      <div className="max-w-4xl mx-auto px-6">
+    <section id="skills" ref={ref} className="py-24 md:py-40 bg-[#050505] border-t border-white/[0.02]">
+      <div className="max-w-5xl mx-auto px-6">
         
-        {/* 1. COMPACT HEADER */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10 border-b border-white/5 pb-6">
-          <div className="space-y-1">
-             <motion.span 
-               initial={{ opacity: 0 }}
-               animate={isInView ? { opacity: 0.5 } : {}}
-               className={`${mono.className} text-[10px] uppercase tracking-[0.3em] text-primary font-bold`}
-             >
-               Tech Stack
-             </motion.span>
-             <motion.h2 
-               initial={{ opacity: 0, y: 10 }}
-               animate={isInView ? { opacity: 1, y: 0 } : {}}
-               className={`${nasalization.className} text-3xl md:text-4xl font-bold tracking-tighter`}
-             >
-               Expertise<span className="text-primary">.</span>
-             </motion.h2>
+        {/* 1. ARCHETYPE HEADER */}
+        <div className="grid md:grid-cols-[1fr_0.5fr] items-end gap-8 mb-16">
+          <div className="space-y-4">
+             <motion.div
+               initial={{ width: 0 }}
+               animate={isInView ? { width: "40px" } : {}}
+               className="h-[1px] bg-primary"
+             />
+             <h2 className={`${nasalization.className} text-5xl md:text-7xl font-black tracking-tighter uppercase text-white`}>
+               TOOLS<span className="text-primary tracking-normal">.</span>
+               <span className={`${quentine.className} lowercase italic text-primary font-thin block text-4xl md:text-5xl -mt-4`}>expertise</span>
+             </h2>
           </div>
           <motion.p 
             initial={{ opacity: 0 }}
-            animate={isInView ? { opacity: 0.4 } : {}}
-            className="text-xs max-w-[240px] leading-relaxed italic"
+            animate={isInView ? { opacity: 0.3 } : {}}
+            className={`${mono.className} text-[9px] leading-relaxed uppercase tracking-widest text-white`}
           >
-            A streamlined collection of tools I use to build the future.
+            A selective collection of technologies prioritized for performance and aesthetic scalability.
           </motion.p>
         </div>
 
-        {/* 2. THE COMPACT DOCK CONTAINER */}
-        <div className="bg-white/[0.02] border border-white/5 rounded-[2rem] p-4 md:p-8 backdrop-blur-3xl shadow-2xl relative overflow-hidden">
-          {/* Subtle internal glow */}
-          <div className="absolute -top-24 -left-24 w-48 h-48 bg-primary/10 blur-[80px] rounded-full pointer-events-none" />
-          
-          <div className="space-y-6">
-            {skillsData.map((category: any, idx: number) => (
-              <div key={idx} className="group">
-                <div className="flex items-center gap-3 mb-1 px-2">
-                   <div className="h-[1px] w-4 bg-primary/30 group-hover:w-8 transition-all" />
-                   <span className={`${mono.className} text-[9px] uppercase tracking-widest text-muted-foreground/50 group-hover:text-primary transition-colors`}>
+        {/* 2. THE SPECIFICATION GRID */}
+        <div className="border border-white/5 bg-white/[0.01] backdrop-blur-sm divide-y divide-white/5">
+          {skillsData.map((category: any, idx: number) => (
+            <div key={idx} className="group relative grid grid-cols-1 md:grid-cols-[180px_1fr] items-center">
+              
+              {/* Category Label */}
+              <div className="p-4 md:p-6 border-b md:border-b-0 md:border-r border-white/5 bg-white/[0.01]">
+                <div className="flex flex-col gap-1">
+                  <span className={`${mono.className} text-[7px] text-primary tracking-[0.4em] uppercase font-bold`}>
+                    CAT_00{idx + 1}
+                  </span>
+                  <span className={`${mono.className} text-[10px] md:text-xs text-white/60 tracking-widest uppercase font-bold group-hover:text-white transition-colors`}>
                     {category.title}
-                   </span>
+                  </span>
                 </div>
+              </div>
+
+              {/* Marquee Content */}
+              <div className="p-4 md:p-0 overflow-hidden">
                 <Marquee 
                   skills={category.data} 
                   direction={idx % 2 === 0 ? "right" : "left"} 
                 />
               </div>
-            ))}
-          </div>
+
+              {/* Status Tag (Floating on Desktop) */}
+              <div className="hidden lg:block absolute right-6 text-[8px] text-white/10 uppercase tracking-[0.5em]">
+                STABLE_RELEASE
+              </div>
+            </div>
+          ))}
         </div>
 
-        {/* 3. FOOTER TAG */}
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : {}}
-          transition={{ delay: 0.8 }}
-          className="flex justify-center mt-8"
-        >
-          <div className="text-[9px] uppercase tracking-[0.5em] text-muted-foreground/30 font-bold border border-white/5 px-4 py-1 rounded-full">
-            Continuous Learning
+        {/* 3. FOOTER TELEMETRY */}
+        <div className="flex flex-col md:flex-row justify-between items-center mt-12 gap-4">
+          <div className="flex gap-4">
+            <div className="flex items-center gap-2">
+              <span className="w-1 h-1 rounded-full bg-primary animate-pulse" />
+              <span className={`${mono.className} text-[8px] text-white/20 uppercase tracking-[0.3em]`}>Real-time Stack update</span>
+            </div>
           </div>
-        </motion.div>
+          <div className={`${mono.className} text-[8px] text-white/20 uppercase tracking-[0.5em]`}>
+            Ref: Build_2.0.26 // Kathmandu
+          </div>
+        </div>
       </div>
     </section>
   );

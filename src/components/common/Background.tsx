@@ -1,61 +1,83 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { MeshGradient } from "@paper-design/shaders-react";
+import { motion, useSpring, useTransform } from "framer-motion";
 
 export const Background = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const springConfig = { damping: 50, stiffness: 90, mass: 1 };
+  const mouseX = useSpring(0, springConfig);
+  const mouseY = useSpring(0, springConfig);
+
+  const [rawPos, setRawPos] = useState({ x: 50, y: 50 });
 
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      // Create a subtle parallax effect (-10 to 10 range)
-      const x = (e.clientX / window.innerWidth - 0.5) * 20;
-      const y = (e.clientY / window.innerHeight - 0.5) * 20;
-      setMousePos({ x, y });
+    const handleMove = (e: MouseEvent) => {
+      const xPct = (e.clientX / window.innerWidth) * 100;
+      const yPct = (e.clientY / window.innerHeight) * 100;
+      
+      setRawPos({ x: xPct, y: yPct });
+      mouseX.set((e.clientX / window.innerWidth - 0.5) * 30);
+      mouseY.set((e.clientY / window.innerHeight - 0.5) * 30);
     };
 
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
+    window.addEventListener("mousemove", handleMove);
+    return () => window.removeEventListener("mousemove", handleMove);
+  }, [mouseX, mouseY]);
+
+  const meshScale = useTransform(mouseX, [-20, 20], [1.05, 1.1]);
 
   return (
-    <div
-      ref={containerRef}
-      className="fixed inset-0 -z-10 h-screen w-screen overflow-hidden bg-black"
-      style={{
-        transform: `translate3d(${mousePos.x}px, ${mousePos.y}px, 0) scale(1.05)`,
-        transition: "transform 0.2s ease-out", // Smooths the parallax
-      }}
-    >
-      {/* 1. The Mesh Gradient Layer */}
-      <MeshGradient
-        className="absolute inset-0 h-full w-full opacity-80"
-        colors={["#000000", "#4c1d95", "#1e1b4b", "#8b5cf6", "#000000"]}
-        speed={0.2}
-      />
+    <div className="fixed inset-0 -z-10 h-[100svh] w-screen overflow-hidden bg-[#020202]">
+      
+      {/* LAYER 1: THE CORE MESH (Darkened Palette) */}
+      <motion.div 
+        style={{ x: mouseX, y: mouseY, scale: meshScale }}
+        className="absolute inset-0 h-full w-full opacity-40 grayscale-[0.4] contrast-150"
+      >
+        <MeshGradient
+          className="h-full w-full"
+          // Swapped light purples for deep navys and pure blacks
+          colors={["#000000", "#020617", "#0f172a", "#000000", "#020617"]}
+          speed={0.05} // Slower speed for a heavier feel
+        />
+      </motion.div>
 
-      {/* 2. Film Grain / Noise Overlay (Crucial for "Premium" look) */}
+      {/* LAYER 2: INTERACTIVE STEALTH GLOW */}
       <div 
-        className="absolute inset-0 pointer-events-none opacity-[0.15] mix-blend-overlay"
+        className="absolute inset-0 pointer-events-none transition-opacity duration-1000"
         style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3Cline x1='0' y1='0' x2='200' y2='200' stroke='white'/%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+          // Reduced radius and opacity for a more subtle "flashlight" effect
+          background: `radial-gradient(450px circle at ${rawPos.x}% ${rawPos.y}%, rgba(99, 102, 241, 0.08), transparent 70%)`,
         }}
       />
 
-      {/* 3. Vignette (Focuses the eye on the center content) */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.4)_100%)]" />
+      {/* LAYER 3: MICRO-GRAIN (Reduced opacity for darkness) */}
+      <div 
+        className="absolute inset-0 pointer-events-none mix-blend-overlay opacity-10"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 250 250' xmlns='http://www.w3.org/2000/svg'%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+        }}
+      />
 
-      {/* SVG Filters (Kept for specific component use later) */}
-      <svg className="hidden">
-        <defs>
-          <filter id="gooey">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
-            <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7" result="goo" />
-            <feComposite in="SourceGraphic" in2="goo" operator="atop" />
-          </filter>
-        </defs>
-      </svg>
+      {/* LAYER 4: THE GLASS PANEL (Increased Blur) */}
+      <div className="absolute inset-0 backdrop-blur-[3px] pointer-events-none">
+        {/* Deeper inner shadow */}
+        <div className="absolute inset-0 shadow-[inset_0_0_200px_rgba(0,0,0,0.95)]" />
+      </div>
+
+      {/* LAYER 5: SCANLINE OVERLAY */}
+      <div 
+        className="absolute inset-0 pointer-events-none opacity-[0.02]"
+        style={{
+          backgroundImage: `linear-gradient(rgba(0,0,0,0) 50%, rgba(255,255,255,0.05) 50%)`,
+          backgroundSize: `100% 3px`,
+        }}
+      />
+
+      {/* LAYER 6: AGGRESSIVE VIGNETTE (Crucial for the 'Dark' look) */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_20%,rgba(0,0,0,0.85)_100%)]" />
+      
     </div>
   );
 };

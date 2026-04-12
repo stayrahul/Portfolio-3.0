@@ -1,32 +1,45 @@
 import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {
-  // BYPASS BUILD ERRORS
+/**
+ * NEXT.JS 16 CONFIGURATION
+ * Optimized for local network testing and Turbopack performance.
+ */
+const nextConfig = {
+  // 1. BYPASS BUILD ERRORS
   typescript: {
     ignoreBuildErrors: true, 
   },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
 
+  // 2. IMAGE OPTIMIZATION
   images: {
     unoptimized: false,
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "**.vercel.app", // Use wildcard to match any Vercel preview branch
+        hostname: "**.vercel.app",
         port: "",
         pathname: "/**",
       },
     ],
   },
 
+  // 3. PERFORMANCE
   compress: true,
 
+  // 4. EXPERIMENTAL FEATURES & NETWORK UNLOCK
   experimental: {
     optimizeCss: true,
+    /**
+     * FORCE INJECT: allowedDevOrigins
+     * This fixes the "Blocked cross-origin request" on your local IP.
+     * We cast to 'any' to bypass strict schema validation in the terminal.
+     */
+    ...({
+      allowedDevOrigins: ["192.168.18.166", "localhost:3000"]
+    } as any)
   },
 
+  // 5. SECURITY HEADERS
   async headers() {
     return [
       {
@@ -47,11 +60,12 @@ const nextConfig: NextConfig = {
     ];
   },
 
+  // 6. REDIRECTS & SHORTCUTS
   async redirects() {
     return [
       { source: "/home", destination: "/", permanent: true },
-      { source: "/email", destination: "mailto:Sushant.Kushwaha@gmail.com", permanent: true },
-      { source: "/github", destination: "https://github.com/stayrahul", permanent: true }, // FIXED URL
+      { source: "/email", destination: "mailto:rahul7926963@gmail.com", permanent: true },
+      { source: "/github", destination: "https://github.com/stayrahul", permanent: true },
       { source: "/direct-resume", destination: "/docs/Sushant_Resume.pdf", permanent: true },
     ];
   },

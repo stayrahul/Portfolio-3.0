@@ -5,16 +5,8 @@ import { motion } from "framer-motion";
 import { LuGithub, LuTwitter, LuMail, LuInstagram, LuFacebook } from "react-icons/lu";
 import { TbBrandTiktok, TbBrandWhatsapp } from "react-icons/tb";
 
-import { quentine } from "@/app/fonts";
+import { quentine, mono, nasalization } from "@/app/fonts";
 import { selfData } from "@/constant/";
-import spaceImg from "@/assets/images/space.png";
-
-const floatingParticles = [
-  { x: "10%", y: "25%", color: "hsl(var(--primary))", duration: 7 },
-  { x: "85%", y: "45%", color: "hsl(var(--secondary))", duration: 8 },
-  { x: "40%", y: "75%", color: "hsl(var(--primary))", duration: 9 },
-  { x: "75%", y: "15%", color: "hsl(var(--secondary))", duration: 10 },
-];
 
 export const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -26,85 +18,110 @@ export const Footer = () => {
     { icon: TbBrandWhatsapp, href: `https://wa.me/${selfData.socials_username.whatsapp}`, label: "WhatsApp" },
     { icon: TbBrandTiktok, href: `https://www.tiktok.com/@${selfData.socials_username.tiktok}`, label: "TikTok" },
     { icon: LuTwitter, href: `https://twitter.com/${selfData.socials_username.twitter}`, label: "Twitter" },
-    { icon: LuMail, href: `mailto:${selfData.email}`, label: "Email" },
+    { icon: LuMail, href: `mailto:${selfData.email.toLowerCase()}`, label: "Email" }, // Forced lowercase
   ];
 
   return (
-    <footer className="relative bg-background/10 border-t border-white/5 overflow-hidden py-8">
-      {/* Space Background */}
-      <div
-        className="absolute inset-0 opacity-[0.02] pointer-events-none"
-        style={{ backgroundImage: `url(${spaceImg.src})`, backgroundSize: "cover" }}
-      />
+    <footer className="relative bg-[#050505] border-t border-white/[0.03] py-0 md:py-0 overflow-hidden">
       
-      <div className="relative z-10 container mx-auto px-6">
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
+      {/* BACKGROUND TEXTURE: Tactical Dot Grid */}
+      <div className="absolute inset-0 opacity-[0.02] pointer-events-none" 
+           style={{ backgroundImage: `radial-gradient(circle, #fff 1px, transparent 1px)`, backgroundSize: '40px 40px' }} />
+      
+      <div className="relative z-10 max-w-7xl mx-auto px-6">
+        <div className="flex flex-col gap-08 md:gap-2 py-2">
+
+          {/* 2. MIDDLE ROW: IDENTITY WATERMARK */}
+          <div className="py-6 border-y border-white/[0.03] flex flex-col items-center justify-center gap-8">
+             <h2 className={`${quentine.className} text-5xl md:text-6xl lg:text-6xl text-white/5 hover:text-primary transition-colors duration-1000 cursor-default select-none lowercase`}>
+                stayrahul
+             </h2>
+             </div>
           
-          {/* 1. LEFT: Identity */}
-          <div className="flex items-center gap-3 order-2 lg:order-1 flex-1 justify-start">
-            <motion.div 
-              whileHover={{ rotate: 5, scale: 1.05 }}
-              className="relative w-9 h-9 rounded-lg bg-white/5 border border-white/10 p-1.5"
-            >
-              <Image src="/images/logo.png" alt="Logo" fill className="p-1 object-contain" />
-            </motion.div>
-            <span className={`${quentine.className} text-xl text-primary/80 tracking-wide`}>
-              {selfData.name}
-            </span>
+          {/* 1. TOP ROW: BRANDING & TELEMETRY */}
+<div className="flex flex-col md:flex-row justify-between items-center md:items-center gap-4 md:gap-2 border-b border-white/[0.03] pb-4 md:pb-0 md:border-none">
+  
+  {/* BRANDING - Centered on mobile */}
+  <div className="flex flex-col items-center md:items-start gap-0">
+    <div className="relative w-8 h-8 grayscale opacity-40">
+      <Image 
+  src="/images/logo.png" 
+  alt="Logo" 
+  fill 
+  sizes="50px" 
+  priority 
+/>
+    </div>
+    <div className="flex flex-col items-center md:items-start leading-none">
+      <span className={`${nasalization.className} text-xl md:text-lg text-white tracking-tighter uppercase`}>
+        Sushant<span className="text-primary ml-1">©</span>
+      </span>
+      <span className={`${mono.className} text-[6px] md:text-[7px] uppercase tracking-[0.5em] text-white/20 mt-2`}>
+        System_Build_2.0.26
+      </span>
+    </div>
+  </div>
+
+  {/* TELEMETRY - Now handles small screens gracefully */}
+  <div className="flex gap-2 mb:0 md:gap-4 items-center justify-center w-full md:w-auto">
+    <div className="flex flex-col items-center md:items-end">
+      <span className={`${mono.className} text-[7px] md:text-[8px] uppercase tracking-[0.3em] text-white/20 mb-1`}>
+        Location
+      </span>
+      <span className={`${mono.className} text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-white/60 font-bold`}>
+        Kathmandu, Nepal
+      </span>
+    </div>
+
+    <div className="h-6 w-[1px] bg-white/5" />
+
+    <div className="flex flex-col items-center md:items-end">
+      <span className={`${mono.className} text-[7px] md:text-[8px] uppercase tracking-[0.3em] text-white/20 mb-1`}>
+        Status
+      </span>
+      <div className="flex items-center gap-1.5">
+         <span className="w-1 h-1 rounded-full bg-primary animate-pulse" />
+         <span className={`${mono.className} text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-white/60 font-bold`}>
+           Online
+         </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+          {/* 2. MIDDLE ROW: SOCIALS */}
+             <div className="flex items-center justify-center gap-2 md:gap-4">
+              {socialLinks.map((link) => (
+                <motion.a
+                  key={link.label}
+                  href={link.href}
+                  className="p-2 text-white/20 hover:text-primary transition-all duration-300"
+                  whileHover={{ y: -3, scale: 1.1 }}
+                  title={link.label}
+                >
+                  <link.icon size={20} />
+                </motion.a>
+              ))}
+            
           </div>
 
-          {/* 2. CENTER: Copyright Area */}
-          <div className="flex flex-col items-center justify-center gap-1.5 order-1 lg:order-2 flex-1 text-center">
-             <p className="text-[10px] md:text-xs uppercase tracking-[0.4em] font-medium opacity-50">
-              &copy; {currentYear} 
-              <span className="text-foreground font-bold tracking-normal uppercase ml-1"> {selfData.name}</span>
-              <span className="mx-3 opacity-20">|</span>
-              All rights reserved
-            </p>
-            <p className="text-[9px] uppercase tracking-[0.2em] opacity-20 italic font-light">
-              Built with Passion • Kathmandu, Nepal
-            </p>
-          </div>
+          {/* 3. BOTTOM ROW: COPYRIGHT & SOCIALS */}
+          <div className="flex flex-col lg:flex-row items-center justify-center gap-8">
+            
+            <div className="flex flex-col items-center lg:items-start gap-2 order-2 lg:order-1">
+              <p className={`${mono.className} text-[9px] uppercase tracking-[0.4em] text-white/30`}>
+                &copy; {currentYear} Sushant. All rights reserved.
+              </p>
+              <p className={`${mono.className} text-[7px] uppercase tracking-[0.2em] text-white/10 italic`}>
+                Built with technical precision • Kathmandu, Nepal
+              </p>
+            </div>
 
-          {/* 3. RIGHT: Social Icons (No BG, Reduced Length) */}
-          <div className="flex items-center gap-2 order-3 flex-1 justify-center lg:justify-end">
-            {socialLinks.map((link) => (
-              <motion.a
-                key={link.label}
-                href={link.href}
-                className="relative group p-2 text-muted-foreground/50 transition-all duration-300"
-                whileHover={{ y: -2 }}
-                whileTap={{ scale: 0.9 }}
-              >
-                {/* Glow effect on hover */}
-                <div className="absolute inset-0 bg-primary/10 blur-md rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" />
-                
-                <link.icon 
-                  size={18} 
-                  className="group-hover:text-primary group-hover:drop-shadow-[0_0_8px_rgba(var(--primary-rgb),0.5)] transition-all duration-300"
-                />
-              </motion.a>
-            ))}
-          </div>
+            
 
+          </div>
         </div>
       </div>
-
-      {/* Floating Particles */}
-      {floatingParticles.map((particle, i) => (
-        <motion.div
-          key={i}
-          className="absolute rounded-full pointer-events-none"
-          style={{
-            width: '1px', height: '1px',
-            background: particle.color,
-            left: particle.x, top: particle.y,
-            boxShadow: `0 0 4px ${particle.color}`,
-          }}
-          animate={{ y: [0, -30, 0], opacity: [0, 0.3, 0] }}
-          transition={{ duration: particle.duration, repeat: Infinity, ease: "easeInOut" }}
-        />
-      ))}
     </footer>
   );
 };

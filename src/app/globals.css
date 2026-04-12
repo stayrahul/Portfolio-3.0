@@ -673,3 +673,32 @@ body {
     backdrop-filter: blur(4px);
   }
 }
+
+@layer utilities {
+  .stroke-text {
+    -webkit-text-stroke: 2px #fff;
+  }
+}
+
+@keyframes glitch-rgb {
+  0% {
+    text-shadow: 2px 0 red, -2px 0 blue;
+    opacity: 0.8;
+  }
+  25% {
+    text-shadow: -2px 0 red, 2px 0 blue;
+    opacity: 0.6;
+  }
+  50% {
+    text-shadow: 2px 0 red, -2px 0 blue;
+    opacity: 0.8;
+  }
+  100% {
+    text-shadow: -2px 0 red, 2px 0 blue;
+    opacity: 0.6;
+  }
+}
+
+.animate-glitch-rgb {
+  animation: glitch-rgb 0.3s ease infinite;
+}
